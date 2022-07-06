@@ -100,36 +100,28 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
         else:
             webbrowser.open(f"http://{url}")
 
-    def append_c_uname_lbl(self, text):
-        old_text = self.lbl_c_uname_result.get_label()
+    def check_username_and_append(self, ison):
+        username = self.ent_keyword.get_text()
+        new_text = ison(username).to_string()
         
         GLib.idle_add(
             self.lbl_c_uname_result.set_label,
-            f"{old_text}\n{text}"
+            f"{self.lbl_c_uname_result.get_label()}\n{new_text}"
         )
-        
-    def check_username_and_append1(self):
-        username = self.ent_keyword.get_text()
-        self.append_c_uname_lbl(gu.is_on_github(username).to_string())
-        self.append_c_uname_lbl(gu.is_on_gitlab(username).to_string())
-        self.append_c_uname_lbl(gu.is_on_facebook(username).to_string())
-        self.append_c_uname_lbl(gu.is_on_dribbble(username).to_string())
-        self.append_c_uname_lbl(gu.is_on_deviantart(username).to_string())
-
-    def check_username_and_append2(self):
-        username = self.ent_keyword.get_text()
-        self.append_c_uname_lbl(gu.is_on_bitbucket(username).to_string())
-        self.append_c_uname_lbl(gu.is_on_medium(username).to_string())
-        self.append_c_uname_lbl(gu.is_on_youtube(username).to_string())
-        self.append_c_uname_lbl(gu.is_on_askfm(username).to_string())
         
     @Gtk.Template.Callback()
     def on_btn_check_username_clicked(self, widget):
+        isons = [
+            gu.is_on_github, gu.is_on_gitlab, gu.is_on_facebook,
+            gu.is_on_dribbble, gu.is_on_deviantart, gu.is_on_bitbucket,
+            gu.is_on_medium, gu.is_on_youtube, gu.is_on_askfm
+        ]
+
         self.rvl_c_uname_result.set_reveal_child(True)
         self.lbl_c_uname_result.set_label('')
         
-        Thread(target=self.check_username_and_append1).start()
-        Thread(target=self.check_username_and_append2).start()
+        for i in isons:
+            Thread(target=self.check_username_and_append, args=[i]).start()
         
     @Gtk.Template.Callback()
     def on_btn_chat_telegram_clicked(self, widget):

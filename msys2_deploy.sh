@@ -24,7 +24,8 @@ pip install pyinstaller
 meson .. ../build
 meson install
 
-wget -O fluent-icon.tar.xz https://github.com/vinceliuice/Fluent-icon-theme/raw/master/release/Fluent.tar.xz
+wget -O fluent-icon.tar.xz \
+  https://github.com/vinceliuice/Fluent-icon-theme/raw/3d0eadd0da82893c763284137179b2c31716863b/release/Fluent.tar.xz
 
 set +e
 /bin/tar -xf fluent-icon.tar.xz \
