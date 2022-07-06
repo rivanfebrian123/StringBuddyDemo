@@ -27,7 +27,17 @@ class Type:
       self.__regex__ = re.compile(self.__pattern__)
 
     return self.__regex__.match(text) != None
-
+    
+@lru_cache(1000)
+def get_number_only(text):
+  result = ''
+  
+  for char in text:
+    if char in '1234567890':
+      result += char
+      
+  return result
+  
 ################ Daftar tipe #################
 
 email = Type('email', r'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')

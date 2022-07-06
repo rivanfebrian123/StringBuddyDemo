@@ -30,6 +30,7 @@ stringbuddydemo_sources = [
   'main.py',
   'window.py',
   'stringbuddy.py',
+  'gousername.py',
 ]
 
 install_data(stringbuddydemo_sources, install_dir: moduledir)
