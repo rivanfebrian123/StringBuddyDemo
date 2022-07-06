@@ -11,10 +11,7 @@ a = Analysis([join(base_path, 'bin/stringbuddydemo')],
              binaries=[(join(typelib_path, tl), 'gi_typelibs') for tl in os.listdir(typelib_path)],
              datas=[(join(base_path, 'etc/gtk-3.0'), 'etc/gtk-3.0'),
                     (join(base_path, 'share/stringbuddydemo'), 'share/stringbuddydemo')],
-             hiddenimports=['numpy',
-                            'pandas',
-                            'sklearn',
-                            'matplotlib'],
+             hiddenimports=[],
              hookspath=[],
              hooksconfig={
                 'gi': {

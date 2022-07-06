@@ -16,12 +16,7 @@ pacman -Sy --noconfirm --needed \
     mingw-w64-x86_64-desktop-file-utils \
     tar \
     mingw-w64-x86_64-python-pip \
-    mingw-w64-x86_64-innoextract \
-    mingw-w64-x86_64-python-numpy \
-    mingw-w64-x86_64-python-pandas \
-    mingw-w64-x86_64-python-scikit-learn \
-    mingw-w64-x86_64-python-matplotlib \
-    mingw-w64-x86_64-libhandy
+    mingw-w64-x86_64-innoextract
 wget -O inno.exe https://jrsoftware.org/download.php/is.exe
 innoextract -m inno.exe
 pip install pyinstaller
