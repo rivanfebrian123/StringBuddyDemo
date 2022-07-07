@@ -29,13 +29,21 @@
 # authorization.
 
 import os
+from os.path import dirname, basename, abspath
 import sys
 import signal
 import gettext
 
 VERSION = '@VERSION@'
-pkgdatadir = '@pkgdatadir@'
-localedir = '@localedir@'
+dir = dirname(abspath(__file__))
+
+if basename(dir) == 'bin':
+    basedir = dirname(dir)
+else:
+    basedir = dir
+
+pkgdatadir = os.path.join(basedir, 'share', 'stringbuddydemo')
+localedir = os.path.join(basedir, 'share', 'locale')
 
 sys.path.insert(1, pkgdatadir)
 signal.signal(signal.SIGINT, signal.SIG_DFL)

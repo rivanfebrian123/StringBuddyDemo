@@ -217,6 +217,55 @@
                             <property name="position">4</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkRevealer" id="rvl_convert_currency">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="transition-type">slide-up</property>
+                            <child>
+                              <object class="GtkButton" id="btn_convert_currency">
+                                <property name="label" translatable="yes">Konversi mata uang</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="margin-bottom">10</property>
+                                <signal name="clicked" handler="on_btn_convert_currency_clicked" swapped="no"/>
+                                <style>
+                                  <class name="suggested-action"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkRevealer" id="rvl_c_currency_result">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="transition-type">slide-up</property>
+                            <child>
+                              <object class="GtkLabel" id="lbl_c_currency_result">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="vexpand">True</property>
+                                <property name="label" translatable="yes">...</property>
+                                <attributes>
+                                  <attribute name="font-desc" value="Monospace 10"/>
+                                </attributes>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">6</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>

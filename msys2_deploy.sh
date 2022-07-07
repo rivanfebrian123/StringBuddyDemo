@@ -19,7 +19,7 @@ pacman -Sy --noconfirm --needed \
     mingw-w64-x86_64-innoextract
 wget -O inno.exe https://jrsoftware.org/download.php/is.exe
 innoextract -m inno.exe
-pip install pyinstaller
+pip install pyinstaller CurrencyConverter
 
 meson .. ../build
 meson install

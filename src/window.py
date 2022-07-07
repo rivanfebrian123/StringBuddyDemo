@@ -28,6 +28,7 @@
 
 import webbrowser
 from gi.repository import Gtk, GLib
+from currency_converter import CurrencyConverter
 from threading import Thread
 from . import stringbuddy as sb
 from . import gousername as gu
@@ -36,31 +37,33 @@ from . import gousername as gu
 class StringbuddydemoWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'StringbuddydemoWindow'
 
+    cc = None
     ent_keyword = Gtk.Template.Child()
     lbl_c_uname_result = Gtk.Template.Child()
+    lbl_c_currency_result = Gtk.Template.Child()
     lbl_result = Gtk.Template.Child()
+    
     rvl_open_browser = Gtk.Template.Child()
     rvl_chat_telegram = Gtk.Template.Child()
     rvl_chat_whatsapp = Gtk.Template.Child()
     rvl_check_username = Gtk.Template.Child()
+    rvl_convert_currency = Gtk.Template.Child()
+    rvl_c_currency_result = Gtk.Template.Child()
     rvl_c_uname_result = Gtk.Template.Child()
     rvl_result = Gtk.Template.Child()
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        
-    def present(self, **kwargs):
-        super().present(**kwargs)
 
     @Gtk.Template.Callback()
     def on_ent_keyword_search_changed(self, widget):
         text = widget.get_text()
+        show_result = False
         show_open_browser = False
         show_check_username = False
         show_chat_telegram = False
         show_chat_whatsapp = False
-        show_result = False
+        show_convert_currency = False
 
         if text:
             result = sb.get_type(text)
@@ -84,16 +87,22 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
                     
                 show_chat_whatsapp = True
             elif result == sb.currency:
-                print(sb.parse_number(text, ''))
-                print(sb.get_currency(text))
+                show_convert_currency = True
+                    
+                 
         else:
             self.lbl_result.set_label("Ini ...")
             
+        self.rvl_result.set_reveal_child(show_result)
         self.rvl_open_browser.set_reveal_child(show_open_browser)
-        self.rvl_check_username.set_reveal_child(show_check_username)
         self.rvl_chat_telegram.set_reveal_child(show_chat_telegram)
         self.rvl_chat_whatsapp.set_reveal_child(show_chat_whatsapp)
-        self.rvl_result.set_reveal_child(show_result)
+        
+        self.rvl_convert_currency.set_reveal_child(show_convert_currency)
+        self.rvl_c_currency_result.set_reveal_child(False)
+        self.lbl_c_currency_result.set_label('')
+        
+        self.rvl_check_username.set_reveal_child(show_check_username)
         self.rvl_c_uname_result.set_reveal_child(False)
         self.lbl_c_uname_result.set_label('')
 
@@ -138,3 +147,31 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
     def on_btn_chat_whatsapp_clicked(self, widget):
         phonenumber = self.ent_keyword.get_text()
         webbrowser.open(f"https://wa.me/{sb.get_number_only(phonenumber)}")
+        
+    @Gtk.Template.Callback()
+    def on_btn_convert_currency_clicked(self, widget):
+        rawtext = self.ent_keyword.get_text()
+        currency = sb.get_currency(rawtext)
+        money = sb.parse_number(rawtext)
+        
+        if not self.cc:
+            self.cc = CurrencyConverter(fallback_on_missing_rate=True)
+        
+        self.rvl_c_currency_result.set_reveal_child(True)
+        self.lbl_c_currency_result.set_label(
+            f'{money} {currency} setara dengan...\n'
+        )
+        
+        for i in self.cc.currencies:
+            label = self.lbl_c_currency_result.get_label()
+            
+            try:
+                result = self.cc.convert(float(money), currency, i)
+                
+                self.lbl_c_currency_result.set_label(
+                    f'{label}\n{i}: {round(result, 2)}'
+                )
+            except:
+                self.lbl_c_currency_result.set_label(
+                    f'{label}\n{i}: -'
+                )
