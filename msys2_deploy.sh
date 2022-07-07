@@ -25,7 +25,7 @@ meson .. ../build
 meson install
 
 wget -O fluent-icon.tar.xz \
-  https://github.com/vinceliuice/Fluent-icon-theme/raw/3d0eadd0da82893c763284137179b2c31716863b/release/Fluent.tar.xz
+    https://github.com/vinceliuice/Fluent-icon-theme/raw/3d0eadd0da82893c763284137179b2c31716863b/release/Fluent.tar.xz
 
 set +e
 /bin/tar -xf fluent-icon.tar.xz \
@@ -40,7 +40,8 @@ rm -rf /mingw64/share/icons/Fluent
 mkdir -p /mingw64/share/icons/Fluent
 cp -rf fluent-icon/* /mingw64/share/icons/Fluent
 
-wget -O fluent-theme.tar.xz https://github.com/vinceliuice/Fluent-gtk-theme/raw/master/release/Fluent.tar.xz
+wget -O fluent-theme.tar.xz \
+    https://github.com/vinceliuice/Fluent-gtk-theme/raw/f929b7e2c8e4e18b3e23af90bae8a1a345beaafb/release/Fluent.tar.xz
 
 set +e
 /bin/tar -xf fluent-theme.tar.xz 'Fluent-light-compact'

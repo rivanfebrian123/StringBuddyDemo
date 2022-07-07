@@ -50,6 +50,9 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         
+    def present(self, **kwargs):
+        super().present(**kwargs)
+
     @Gtk.Template.Callback()
     def on_ent_keyword_search_changed(self, widget):
         text = widget.get_text()
@@ -80,6 +83,9 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
                     show_chat_telegram = True
                     
                 show_chat_whatsapp = True
+            elif result == sb.currency:
+                print(sb.parse_number(text, ''))
+                print(sb.get_currency(text))
         else:
             self.lbl_result.set_label("Ini ...")
             
@@ -126,7 +132,7 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
     @Gtk.Template.Callback()
     def on_btn_chat_telegram_clicked(self, widget):
         phonenumber = self.ent_keyword.get_text()
-        webbrowser.open(f"https://t.me/+{sb.get_number_only(phonenumber)}")
+        webbrowser.open(f"https://t.me/{sb.get_number_only(phonenumber)}")
         
     @Gtk.Template.Callback()
     def on_btn_chat_whatsapp_clicked(self, widget):
