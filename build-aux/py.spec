@@ -1,21 +1,30 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 import sys
+import importlib
 from os.path import dirname, join
 
 base_path = dirname(dirname(sys.executable))
 typelib_path = join(base_path, 'lib/girepository-1.0')
 block_cipher = None
 
+module_datas = [('currency_converter', ['eurofxref.csv', 'eurofxref-hist.zip'])]
+__module_datas = []
+
+for module, datas in module_datas:
+  root = dirname(importlib.import_module(module).__file__)
+  __module_datas.extend((join(root, data), module) for data in datas)
+
 a = Analysis([join(base_path, 'bin/stringbuddydemo')],
              binaries=[(join(typelib_path, tl), 'gi_typelibs') for tl in os.listdir(typelib_path)],
-             datas=[(join(base_path, 'etc/gtk-3.0'), 'etc/gtk-3.0'),
+             datas=[*__module_datas,
+                    (join(base_path, 'etc/gtk-3.0'), 'etc/gtk-3.0'),
                     (join(base_path, 'share/stringbuddydemo'), 'share/stringbuddydemo')],
              hiddenimports=[
                 'gi.repository.Gtk',
-                'webbrowser',
                 'currency_converter',
                 'dateutil.parser',
+                'webbrowser',
                 'requests'
                 ],
              hookspath=[],
