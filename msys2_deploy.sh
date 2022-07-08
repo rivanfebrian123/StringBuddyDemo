@@ -16,6 +16,8 @@ pacman -Sy --noconfirm --needed \
     mingw-w64-x86_64-desktop-file-utils \
     tar \
     mingw-w64-x86_64-python-pip \
+    mingw-w64-x86_64-python-dateutil \
+    mingw-w64-x86_64-python-requests \
     mingw-w64-x86_64-innoextract
 wget -O inno.exe https://jrsoftware.org/download.php/is.exe
 innoextract -m inno.exe
@@ -32,7 +34,7 @@ set +e
     'Fluent/symbolic/actions' 'Fluent/symbolic/mimetypes' \
     'Fluent/symbolic/status/process-working-symbolic.svg' \
     'Fluent/icon-theme.cache' 'Fluent/index.theme' \
-    'Fluent/scalable/apps/appointment-soon.svg'
+    'Fluent/scalable/apps/empathy.svg'
 set -e
 
 mv 'Fluent' 'fluent-icon'

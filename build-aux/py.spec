@@ -11,15 +11,24 @@ a = Analysis([join(base_path, 'bin/stringbuddydemo')],
              binaries=[(join(typelib_path, tl), 'gi_typelibs') for tl in os.listdir(typelib_path)],
              datas=[(join(base_path, 'etc/gtk-3.0'), 'etc/gtk-3.0'),
                     (join(base_path, 'share/stringbuddydemo'), 'share/stringbuddydemo')],
-             hiddenimports=[],
+             hiddenimports=[
+                'gi.repository.Gtk',
+                'webbrowser',
+                'currency_converter',
+                'dateutil.parser',
+                'requests'
+                ],
              hookspath=[],
              hooksconfig={
                 'gi': {
                     'icons': ['Fluent'],
                     'themes': ['Fluent'],
-                    'languages': ['en_US']
-                    }
-                },
+                    'languages': ['en_US'],
+                    'module-versions': {
+                       'Gtk': '3.0'
+                     }
+                }
+             },
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
