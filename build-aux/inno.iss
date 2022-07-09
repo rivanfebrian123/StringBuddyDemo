@@ -10,7 +10,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{f91d2276-d77e-449b-a43c-689ef64f06b1}
+AppId={{9A7F3B7F-0196-45BE-B741-048E05D932D1}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -24,8 +24,8 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
 OutputBaseFilename=StringBuddyDemo-Setup
-SetupIconFile=..\data\logo.ico
-Compression=lzma2/ultra
+SetupIconFile=..\build\logo.ico
+Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
 

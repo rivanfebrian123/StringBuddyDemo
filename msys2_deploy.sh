@@ -18,7 +18,8 @@ pacman -Sy --noconfirm --needed \
     mingw-w64-x86_64-python-pip \
     mingw-w64-x86_64-python-dateutil \
     mingw-w64-x86_64-python-requests \
-    mingw-w64-x86_64-innoextract
+    mingw-w64-x86_64-innoextract \
+    mingw-w64-x86_64-icoutils
 wget -O inno.exe https://jrsoftware.org/download.php/is.exe
 innoextract -m inno.exe
 pip install pyinstaller CurrencyConverter
@@ -33,8 +34,7 @@ set +e
 /bin/tar -xf fluent-icon.tar.xz \
     'Fluent/symbolic/actions' 'Fluent/symbolic/mimetypes' \
     'Fluent/symbolic/status/process-working-symbolic.svg' \
-    'Fluent/icon-theme.cache' 'Fluent/index.theme' \
-    'Fluent/scalable/apps/empathy.svg'
+    'Fluent/icon-theme.cache' 'Fluent/index.theme'
 set -e
 
 mv 'Fluent' 'fluent-icon'
@@ -53,6 +53,18 @@ mv 'Fluent-light-compact' 'fluent-theme'
 rm -rf /mingw64/share/themes/Fluent
 mkdir -p /mingw64/share/themes/Fluent
 cp -rf fluent-theme/* /mingw64/share/themes/Fluent
+
+sizes=(16 32 48 256)
+files=()
+
+for size in ${sizes[@]}; do
+    files+=(logo-${size}.png)
+    rsvg-convert -a -w ${size} -h ${size} \
+        ../data/icons/hicolor/scalable/apps/org.example.App.svg \
+        -o logo-${size}.png
+done
+
+icotool -c -o logo.ico ${files[@]}
 
 mkdir -p /mingw64/etc/gtk-3.0
 echo -e "[Settings]\ngtk-theme-name=Fluent\ngtk-icon-theme-name=Fluent" > /mingw64/etc/gtk-3.0/settings.ini

@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/org/example/App">
     <file>window.ui</file>
+    <file alias="logo.svg">../data/icons/hicolor/scalable/apps/org.example.App.svg</file>
   </gresource>
 </gresources>
