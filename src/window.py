@@ -39,6 +39,9 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
 
     cc = None
     ent_keyword = Gtk.Template.Child()
+    sw_whatisthis = Gtk.Template.Child()
+    vp_whatisthis = Gtk.Template.Child()
+
     lbl_c_uname_result = Gtk.Template.Child()
     lbl_c_currency_result = Gtk.Template.Child()
     lbl_result = Gtk.Template.Child()
@@ -54,6 +57,9 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+    def present(self, **kwargs):
+        super().present(**kwargs)
 
     @Gtk.Template.Callback()
     def on_ent_keyword_search_changed(self, widget):
@@ -88,10 +94,6 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
                 show_chat_whatsapp = True
             elif result == sb.currency:
                 show_convert_currency = True
-                    
-                 
-        else:
-            self.lbl_result.set_label("Ini ...")
             
         self.rvl_result.set_reveal_child(show_result)
         self.rvl_open_browser.set_reveal_child(show_open_browser)
@@ -100,11 +102,9 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
         
         self.rvl_convert_currency.set_reveal_child(show_convert_currency)
         self.rvl_c_currency_result.set_reveal_child(False)
-        self.lbl_c_currency_result.set_label('')
         
         self.rvl_check_username.set_reveal_child(show_check_username)
         self.rvl_c_uname_result.set_reveal_child(False)
-        self.lbl_c_uname_result.set_label('')
 
     @Gtk.Template.Callback()
     def on_btn_open_browser_clicked(self, widget):
@@ -115,15 +115,24 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
         else:
             webbrowser.open(f"http://{url}")
 
+    def scroll_to_bottom(self, smooth=False):
+        va = self.sw_whatisthis.get_vadjustment()
+        anim = 500
+        step = 25 if smooth else 250
+
+        for i in range(step, anim, step):
+            GLib.timeout_add(i, va.set_value, va.get_upper() * 2)
+
     def check_username_and_append(self, ison):
         username = self.ent_keyword.get_text()
         new_text = ison(username).to_string()
-        
+
         GLib.idle_add(
             self.lbl_c_uname_result.set_label,
             f"{self.lbl_c_uname_result.get_label()}\n{new_text}"
         )
-        
+        self.scroll_to_bottom()
+
     @Gtk.Template.Callback()
     def on_btn_check_username_clicked(self, widget):
         isons = [
@@ -134,10 +143,10 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
 
         self.rvl_c_uname_result.set_reveal_child(True)
         self.lbl_c_uname_result.set_label('')
-        
+
         for i in isons:
             Thread(target=self.check_username_and_append, args=[i]).start()
-        
+
     @Gtk.Template.Callback()
     def on_btn_chat_telegram_clicked(self, widget):
         phonenumber = self.ent_keyword.get_text()
@@ -153,6 +162,7 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
         rawtext = self.ent_keyword.get_text()
         currency = sb.get_currency(rawtext)
         money = sb.parse_number(rawtext)
+        result = ''
         
         if not self.cc:
             self.cc = CurrencyConverter(fallback_on_missing_rate=True)
@@ -163,15 +173,13 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
         )
         
         for i in self.cc.currencies:
-            label = self.lbl_c_currency_result.get_label()
-            
             try:
-                result = self.cc.convert(float(money), currency, i)
-                
-                self.lbl_c_currency_result.set_label(
-                    f'{label}\n{i}: {round(result, 2)}'
-                )
+                money_result = self.cc.convert(float(money), currency, i)
+                result += f'\n{i}: {round(money_result, 2)}'
             except:
-                self.lbl_c_currency_result.set_label(
-                    f'{label}\n{i}: -'
-                )
+                result += f'\n{i}: -'
+
+        self.lbl_c_currency_result.set_label(
+            f'{self.lbl_c_currency_result.get_label()}{result}'
+        )
+        self.scroll_to_bottom(True)

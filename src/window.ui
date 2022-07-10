@@ -3,8 +3,8 @@
 <interface>
   <requires lib="gtk+" version="3.24"/>
   <template class="StringbuddydemoWindow" parent="GtkApplicationWindow">
-    <property name="width-request">480</property>
-    <property name="height-request">520</property>
+    <property name="width-request">540</property>
+    <property name="height-request">560</property>
     <property name="can-focus">False</property>
     <child>
       <object class="GtkStack" id="stack1">
@@ -12,12 +12,12 @@
         <property name="can-focus">False</property>
         <property name="transition-type">slide-left-right</property>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkScrolledWindow" id="sw_whatisthis">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="hscrollbar-policy">never</property>
             <child>
-              <object class="GtkViewport">
+              <object class="GtkViewport" id="vp_whatisthis">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="shadow-type">none</property>
@@ -51,7 +51,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="halign">center</property>
-                        <property name="margin-top">26</property>
+                        <property name="margin-top">34</property>
                         <property name="margin-bottom">26</property>
                         <property name="primary-icon-name">edit-find-symbolic</property>
                         <property name="primary-icon-activatable">False</property>

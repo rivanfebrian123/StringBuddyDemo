@@ -3,6 +3,9 @@ from functools import lru_cache
 from dateutil.parser import parse as parse_datetime
 
 class Type:
+  # Eq dan Hash perlu diimplementasikan manual karena regex itu konflik dan
+  # itu memungkinkan terjadinya konflik
+  
   __name__ = None
   __pattern__ = None
   __regex__ = None
@@ -11,6 +14,12 @@ class Type:
     self.to_string = self.get_name
     self.__name__ = name
     self.__pattern__ = pattern
+
+  def __eq__(self, other):
+    return self.__name__ == other.__name__
+
+  def __hash__(self):
+    return hash(self.__pattern__)
 
   def get_name(self):
     return self.__name__

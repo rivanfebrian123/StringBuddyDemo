@@ -34,6 +34,7 @@ set +e
 /bin/tar -xf fluent-icon.tar.xz \
     'Fluent/symbolic/actions' 'Fluent/symbolic/mimetypes' \
     'Fluent/symbolic/status/process-working-symbolic.svg' \
+    'Fluent/scalable/apps/image-missing.svg'
     'Fluent/icon-theme.cache' 'Fluent/index.theme'
 set -e
 
