@@ -156,6 +156,7 @@ username = Type('username', r'^[a-zA-Z](?:\w|[.-](?=\w)){3,31}[a-zA-Z0-9]$.*(?<!
 url = Type('URL', r'^([a-zA-Z]+:\/?\/?)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-zA-Z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#()?&//=]*)$')
 phonenumber = Type('phone number', '^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$')
 md5 = Type('MD5', '^[a-f0-9]{32}$')
+fileExt = Type('file extension', '^\.[0-9a-z]{1,10}$')
 
 currency = None
 usernameUrl = Type('username/URL')
@@ -169,6 +170,7 @@ is_username = username.__is_matching__
 is_url = url.__is_matching__
 is_phonenumber = phonenumber.__is_matching__
 is_md5 = md5.__is_matching__
+is_fileExt = fileExt.__is_matching__
 
 def is_currency(text):
   global currency
@@ -205,8 +207,6 @@ def get_type(text):
   
   if is_email(text):
     return email
-  elif is_currency(text):
-    return currency
   elif is_url(text):
     if is_username(text):
       return usernameUrl
@@ -214,10 +214,14 @@ def get_type(text):
     return url
   elif is_username(text):
     return username
-  elif is_datetime(text):
-    return datetime
+  elif is_fileExt(text):
+    return fileExt
   elif is_phonenumber(text):
     return phonenumber
+  elif is_datetime(text):
+    return datetime
+  elif is_currency(text):
+    return currency
   elif is_md5(text):
     return md5
   else:

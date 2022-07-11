@@ -26,6 +26,7 @@
 # use or other dealings in this Software without prior written
 # authorization.
 
+import platform
 import webbrowser
 from gi.repository import Gtk, GLib
 from currency_converter import CurrencyConverter
@@ -38,15 +39,17 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'StringbuddydemoWindow'
 
     cc = None
+    animation_running = False
     ent_keyword = Gtk.Template.Child()
     sw_whatisthis = Gtk.Template.Child()
-    vp_whatisthis = Gtk.Template.Child()
+    btn_find_app = Gtk.Template.Child()
 
     lbl_c_uname_result = Gtk.Template.Child()
     lbl_c_currency_result = Gtk.Template.Child()
     lbl_result = Gtk.Template.Child()
     
     rvl_open_browser = Gtk.Template.Child()
+    rvl_chat_default = Gtk.Template.Child()
     rvl_chat_telegram = Gtk.Template.Child()
     rvl_chat_whatsapp = Gtk.Template.Child()
     rvl_check_username = Gtk.Template.Child()
@@ -54,12 +57,11 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
     rvl_c_currency_result = Gtk.Template.Child()
     rvl_c_uname_result = Gtk.Template.Child()
     rvl_result = Gtk.Template.Child()
+    rvl_find_app = Gtk.Template.Child()
+    rvl_send_email = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-    def present(self, **kwargs):
-        super().present(**kwargs)
 
     @Gtk.Template.Callback()
     def on_ent_keyword_search_changed(self, widget):
@@ -67,9 +69,12 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
         show_result = False
         show_open_browser = False
         show_check_username = False
+        show_chat_default = False
         show_chat_telegram = False
         show_chat_whatsapp = False
         show_convert_currency = False
+        show_find_app = False
+        show_send_email = False
 
         if text:
             result = sb.get_type(text)
@@ -80,8 +85,12 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
             else:
                 self.lbl_result.set_label(f"Ini {result.to_string()}...")
 
+            # TODO: Update ke match-case kalau memungkinkan saat bundling
+
             if result == sb.url:
                 show_open_browser = True
+            elif result == sb.email:
+                show_send_email = True
             elif result == sb.username:
                 show_check_username = True
             elif result == sb.usernameUrl:
@@ -91,14 +100,25 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
                 if text[0] == '+':
                     show_chat_telegram = True
                     
+                show_chat_default = True
                 show_chat_whatsapp = True
             elif result == sb.currency:
                 show_convert_currency = True
+            elif result == sb.fileExt:
+                show_find_app = True
+
+                if platform.system() == 'Windows':
+                    self.btn_find_app.set_label("Cari aplikasi di Microsoft Store")
+                else:
+                    self.btn_find_app.set_label("Cari aplikasi di Google")
             
         self.rvl_result.set_reveal_child(show_result)
         self.rvl_open_browser.set_reveal_child(show_open_browser)
+        self.rvl_chat_default.set_reveal_child(show_chat_default)
         self.rvl_chat_telegram.set_reveal_child(show_chat_telegram)
         self.rvl_chat_whatsapp.set_reveal_child(show_chat_whatsapp)
+        self.rvl_find_app.set_reveal_child(show_find_app)
+        self.rvl_send_email.set_reveal_child(show_send_email)
         
         self.rvl_convert_currency.set_reveal_child(show_convert_currency)
         self.rvl_c_currency_result.set_reveal_child(False)
@@ -115,13 +135,22 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
         else:
             webbrowser.open(f"http://{url}")
 
-    def scroll_to_bottom(self, smooth=False):
+    def reset_animation(self):
+        self.animation_running = False
+
+    def scroll_to_bottom(self):
+        if self.animation_running:
+            return None
+
         va = self.sw_whatisthis.get_vadjustment()
         anim = 500
-        step = 25 if smooth else 250
+        step = 25
 
         for i in range(step, anim, step):
             GLib.timeout_add(i, va.set_value, va.get_upper() * 2)
+
+        self.animation_running = True
+        GLib.timeout_add(anim, self.reset_animation)
 
     def check_username_and_append(self, ison):
         username = self.ent_keyword.get_text()
@@ -146,6 +175,11 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
 
         for i in isons:
             Thread(target=self.check_username_and_append, args=[i]).start()
+
+    @Gtk.Template.Callback()
+    def on_btn_chat_default_clicked(self, widget):
+        phonenumber = self.ent_keyword.get_text()
+        webbrowser.open(f"tel:{sb.get_number_only(phonenumber)}")
 
     @Gtk.Template.Callback()
     def on_btn_chat_telegram_clicked(self, widget):
@@ -182,4 +216,20 @@ class StringbuddydemoWindow(Gtk.ApplicationWindow):
         self.lbl_c_currency_result.set_label(
             f'{self.lbl_c_currency_result.get_label()}{result}'
         )
-        self.scroll_to_bottom(True)
+        self.scroll_to_bottom()
+
+    @Gtk.Template.Callback()
+    def on_btn_find_app_clicked(self, widget):
+        ext = self.ent_keyword.get_text()[1:]
+
+        if platform.system() == 'Windows':
+            webbrowser.open(f"ms-windows-store://assoc/?FileExt={ext}")
+        else:
+            webbrowser.open(
+                f"https://www.google.com/search?q={ext}+program+for+unix"
+            )
+
+    @Gtk.Template.Callback()
+    def on_btn_send_email_clicked(self, widget):
+        email = self.ent_keyword.get_text()
+        webbrowser.open(f"mailto:{email}")
