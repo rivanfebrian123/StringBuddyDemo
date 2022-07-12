@@ -25,7 +25,8 @@ a = Analysis([join(base_path, 'bin/stringbuddydemo')],
                 'currency_converter',
                 'dateutil.parser',
                 'webbrowser',
-                'requests'
+                'requests',
+                'platform'
                 ],
              hookspath=[],
              hooksconfig={
@@ -70,4 +71,4 @@ coll = COLLECT(exe,
                a.datas, 
                strip=False,
                upx=False,
-               name='stringbuddydemo')
+               name='stringbuddydemo')

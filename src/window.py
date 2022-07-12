@@ -34,6 +34,9 @@ from threading import Thread
 from . import stringbuddy as sb
 from . import gousername as gu
 
+# TODO: tambah protocol URI error handler tampilan GUInya
+# TODO: abstraksi widget interaksi
+
 @Gtk.Template(resource_path='/org/example/App/window.ui')
 class StringbuddydemoWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'StringbuddydemoWindow'
